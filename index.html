@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Geoportal ODS Ambiental</title>
+
+  <!-- Calcite Design System -->
+  <script type="module" src="https://js.arcgis.com/calcite-components/3.0.3/calcite.esm.js"></script>
+  <link rel="stylesheet" href="https://js.arcgis.com/calcite-components/3.0.3/calcite.css" />
+
+  <!-- ArcGIS SDK -->
+  <link rel="stylesheet" href="https://js.arcgis.com/4.32/esri/themes/dark/main.css" />
+  <script src="https://js.arcgis.com/4.32/"></script>
+  <script type="module" src="https://js.arcgis.com/map-components/4.32/arcgis-map-components.esm.js"></script>
+
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: "Segoe UI", sans-serif;
+    }
+
+    arcgis-map {
+      position: absolute;
+      top: 60px;
+      left: 270px;
+      right: 0;
+      bottom: 0;
+    }
+
+    header {
+      position: absolute;
+      top: 0;
+      left: 270px;
+      right: 0;
+      height: 60px;
+      background-color: #2e7d32;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      z-index: 999;
+    }
+
+    .sidebar {
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      width: 270px;
+      background-color: #f9f9f9;
+      border-right: 1px solid #ccc;
+      padding: 20px;
+      overflow-y: auto;
+    }
+
+    .sidebar h2 {
+      color: #2e7d32;
+    }
+
+    .sidebar ul {
+      padding-left: 20px;
+    }
+
+    select {
+      font-size: 1rem;
+      padding: 5px;
+    }
+
+    @media (max-width: 768px) {
+      .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+        border-right: none;
+        border-bottom: 1px solid #ccc;
+      }
+
+      header {
+        left: 0;
+        top: auto;
+        bottom: 0;
+        height: auto;
+        flex-direction: column;
+        padding: 10px;
+      }
+
+      arcgis-map {
+        top: 300px;
+        left: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="sidebar">
+    <h2>ODS Ambientales</h2>
+    <p>Visualiza información sobre los siguientes ODS:</p>
+    <ul>
+      <li>ODS 6 - Agua limpia</li>
+      <li>ODS 7 - Energía asequible</li>
+      <li>ODS 11 - Ciudades sostenibles</li>
+      <li>ODS 13 - Acción climática</li>
+      <li>ODS 14 - Ecosistemas marinos</li>
+      <li>ODS 15 - Vida terrestre</li>
+    </ul>
+  </div>
+
+  <header>
+    <strong>Geoportal ODS Ambiental</strong>
+    <div>
+      <label for="selectorODS">ODS:</label>
+      <select id="selectorODS">
+        <option value="agua">ODS 6 - Agua</option>
+        <option value="energia">ODS 7 - Energía</option>
+        <option value="ciudades">ODS 11 - Ciudades</option>
+        <option value="clima">ODS 13 - Clima</option>
+        <option value="marinos">ODS 14 - Marinos</option>
+        <option value="bosques">ODS 15 - Bosques</option>
+      </select>
+    </div>
+  </header>
+
+  <arcgis-map id="map" item-id="2c3f8ee7752b4629ab581ba20e990232">
+    <arcgis-zoom position="top-left"></arcgis-zoom>
+    <arcgis-search position="top-right"></arcgis-search>
+    <arcgis-legend position="bottom-left"></arcgis-legend>
+    <arcgis-basemap-toggle position="bottom-right"></arcgis-basemap-toggle>
+    <arcgis-layer-list position="top-left"></arcgis-layer-list>
+    <arcgis-home position="top-left"></arcgis-home>
+    <arcgis-locate position="top-left"></arcgis-locate>
+    <arcgis-scale-bar position="bottom-left"></arcgis-scale-bar>
+    <arcgis-coordinate-conversion position="bottom-right"></arcgis-coordinate-conversion>
+  </arcgis-map>
+
+  <script type="module">
+    const map = document.getElementById("map");
+    const selector = document.getElementById("selectorODS");
+
+    const webmapsODS = {
+      agua: "2c3f8ee7752b4629ab581ba20e990232",
+      energia: "REEMPLAZAR_ID_ENERGIA",
+      ciudades: "REEMPLAZAR_ID_CIUDADES",
+      clima: "REEMPLAZAR_ID_CLIMA",
+      marinos: "REEMPLAZAR_ID_MARINOS",
+      bosques: "REEMPLAZAR_ID_BOSQUES"
+    };
+
+    selector.addEventListener("change", (e) => {
+      const selected = e.target.value;
+      const itemId = webmapsODS[selected];
+      if (itemId) {
+        map.itemId = itemId;
+      } else {
+        alert("Este ODS aún no está disponible.");
+      }
+    });
+
+    map.addEventListener("arcgisViewReadyChange", (event) => {
+      console.log("Mapa listo:", event.detail.view);
+    });
+  </script>
+</body>
+</html>
