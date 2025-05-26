@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="https://js.arcgis.com/4.32/esri/themes/light/main.css" />
   <script src="https://js.arcgis.com/4.32/"></script>
   <script type="module" src="https://js.arcgis.com/map-components/4.32/arcgis-map-components.esm.js"></script>
-  <script type="module" src="https://js.arcgis.com/map-components/4.32/components/arcgis-basemap-gallery.js"></script>
+  <!-- Se ha eliminado la importación de arcgis-basemap-gallery -->
   <script type="module" src="https://js.arcgis.com/map-components/4.32/components/arcgis-scene.js"></script>
 
   <style>
@@ -87,7 +87,6 @@
   <nav class="sidebar" id="sidebar">
     <h2>ODS Ambientales</h2>
     <button class="ods-button" data-ods="agua">
-      <!-- Icono sencillo SVG -->
       <svg width="20" height="20" viewBox="0 0 24 24"><path d="M12 2C8 8 4 11 4 14a8 8 0 0016 0c0-3-4-6-4-12z"/></svg>
       ODS 6 - Agua y Saneamiento
     </button>
@@ -120,10 +119,10 @@
       <arcgis-search position="top-right"></arcgis-search>
       <arcgis-legend position="bottom-right"></arcgis-legend>
       <arcgis-layer-list position="top-left"></arcgis-layer-list>
-      <arcigis-home position="top-left"></arcgis-home>
-      <arcgis-locate position="top-left"></arcigis-locate>
+      <arcgis-home position="top-left"></arcgis-home>
+      <arcgis-locate position="top-left"></arcgis-locate>
       <arcgis-scale-bar position="bottom-right"></arcgis-scale-bar>
-      <arcgis-basemap-gallery position="top-right"></arcgis-basemap-gallery>
+      <!-- Se eliminó: <arcgis-basemap-gallery> -->
     </arcgis-map>
   </div>
 
@@ -150,10 +149,9 @@
         <arcgis-search position="top-right"></arcgis-search>
         <arcgis-legend position="bottom-right"></arcgis-legend>
         <arcgis-layer-list position="top-left"></arcgis-layer-list>
-        <arcgig-home position="top-left"></arcgig-home>
+        <arcgis-home position="top-left"></arcgis-home>
         <arcgis-locate position="top-left"></arcgis-locate>
         <arcgis-scale-bar position="bottom-right"></arcgis-scale-bar>
-        <arcgis-basemap-gallery position="top-right"></arcgis-basemap-gallery>
         ${isScene ? '<arcgis-rotate position="top-left"></arcgis-rotate><arcgis-compass position="top-left"></arcgis-compass>' : ''}
       `;
       container.appendChild(mapEl);
