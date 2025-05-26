@@ -9,7 +9,6 @@
   <link rel="stylesheet" href="https://js.arcgis.com/4.32/esri/themes/light/main.css" />
   <script src="https://js.arcgis.com/4.32/"></script>
   <script type="module" src="https://js.arcgis.com/map-components/4.32/arcgis-map-components.esm.js"></script>
-  <!-- Se ha eliminado la importación de arcgis-basemap-gallery -->
   <script type="module" src="https://js.arcgis.com/map-components/4.32/components/arcgis-scene.js"></script>
 
   <style>
@@ -114,6 +113,7 @@
 
   <!-- Contenedor de mapa -->
   <div id="map-container">
+    <!-- Mapa inicial (ODS Agua) -->
     <arcgis-map id="map" item-id="2a2e5d76c246496690b3c2a28f884df0">
       <arcgis-zoom position="top-left"></arcgis-zoom>
       <arcgis-search position="top-right"></arcgis-search>
@@ -122,17 +122,16 @@
       <arcgis-home position="top-left"></arcgis-home>
       <arcgis-locate position="top-left"></arcgis-locate>
       <arcgis-scale-bar position="bottom-right"></arcgis-scale-bar>
-      <!-- Se eliminó: <arcgis-basemap-gallery> -->
     </arcgis-map>
   </div>
 
-  <!-- Script -->
+  <!-- Script de carga dinámica -->
   <script type="module">
     const webmapsODS = {
       agua:     "2a2e5d76c246496690b3c2a28f884df0",
       energia:  "91b825c4f0c84eb499f45246b61c4106",
       clima:    "9ab621dbeef7403993c37120715d9727",
-      ciudades: "69342b9a479c4a7abdff1df4c6425ad0",
+      ciudades: "69342b9a479c4a7abdff1df4c6425ad0",  // Scene
       marinos:  "f77b5962c4024b62981a8bfdae0339e8",
       bosques:  "e3dfac24825b4a878ad8e8c3ff6276cd"
     };
@@ -144,7 +143,9 @@
       const mapEl = document.createElement(tag);
       mapEl.id = 'map';
       mapEl.setAttribute('item-id', itemId);
-      mapEl.innerHTML = `
+
+      // Widgets comunes
+      let widgets = `
         <arcgis-zoom position="top-left"></arcgis-zoom>
         <arcgis-search position="top-right"></arcgis-search>
         <arcgis-legend position="bottom-right"></arcgis-legend>
@@ -152,24 +153,35 @@
         <arcgis-home position="top-left"></arcgis-home>
         <arcgis-locate position="top-left"></arcgis-locate>
         <arcgis-scale-bar position="bottom-right"></arcgis-scale-bar>
-        ${isScene ? '<arcgis-rotate position="top-left"></arcgis-rotate><arcgis-compass position="top-left"></arcgis-compass>' : ''}
       `;
+
+      // Si es 3D (Scene), agregamos rotate y navigation-toggle
+      if (isScene) {
+        widgets += `
+          <arcgis-rotate position="top-left"></arcgis-rotate>
+          <arcgis-navigation-toggle position="top-left"></arcgis-navigation-toggle>
+        `;
+      }
+
+      mapEl.innerHTML = widgets;
       container.appendChild(mapEl);
+
+      // Ajuste para sidebar
       document.getElementById('map-container').style.left = window.innerWidth > 768 ? '260px' : '0';
     }
 
-    // Eventos de ODS
+    // Botones ODS
     document.querySelectorAll('.ods-button').forEach(btn => {
       btn.addEventListener('click', () => {
         document.querySelectorAll('.ods-button').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
-        const id = webmapsODS[btn.dataset.ods];
-        const scene = btn.dataset.ods === 'ciudades';
-        loadMap(id, scene);
+        const itemId = webmapsODS[btn.dataset.ods];
+        const isScene = btn.dataset.ods === 'ciudades';
+        loadMap(itemId, isScene);
       });
     });
 
-    // Toggle en móvil
+    // Toggle sidebar en móvil
     document.getElementById('toggle-sidebar').addEventListener('click', () => {
       document.getElementById('sidebar').classList.toggle('active');
     });
