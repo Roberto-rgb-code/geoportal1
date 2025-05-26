@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<<<<<<<<<<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
@@ -10,9 +10,11 @@
   <link rel="stylesheet" href="https://js.arcgis.com/calcite-components/3.0.3/calcite.css" />
 
   <!-- ArcGIS SDK -->
-  <link rel="stylesheet" href="https://js.arcgis.com/4.32/esri/themes/dark/main.css" />
+  <link rel="stylesheet" href="https://js.arcgis.com/4.32/esri/themes/light/main.css" />
   <script src="https://js.arcgis.com/4.32/"></script>
   <script type="module" src="https://js.arcgis.com/map-components/4.32/arcgis-map-components.esm.js"></script>
+  <script type="module" src="https://js.arcgis.com/map-components/4.32/components/arcgis-basemap-gallery.js"></script>
+  <script type="module" src="https://js.arcgis.com/map-components/4.32/components/arcgis-scene.js"></script>
 
   <style>
     html, body {
@@ -20,20 +22,13 @@
       padding: 0;
       height: 100%;
       font-family: "Segoe UI", sans-serif;
-    }
-
-    arcgis-map {
-      position: absolute;
-      top: 60px;
-      left: 270px;
-      right: 0;
-      bottom: 0;
+      background-color: #f4f4f4;
     }
 
     header {
       position: absolute;
       top: 0;
-      left: 270px;
+      left: 250px;
       right: 0;
       height: 60px;
       background-color: #2e7d32;
@@ -50,48 +45,51 @@
       top: 0;
       left: 0;
       bottom: 0;
-      width: 270px;
-      background-color: #f9f9f9;
+      width: 250px;
+      background-color: #ffffff;
       border-right: 1px solid #ccc;
-      padding: 20px;
+      padding: 10px;
       overflow-y: auto;
+      z-index: 998;
     }
 
     .sidebar h2 {
       color: #2e7d32;
+      font-size: 18px;
+      margin-bottom: 10px;
     }
 
-    .sidebar ul {
-      padding-left: 20px;
+    .ods-button {
+      display: block;
+      width: 100%;
+      padding: 10px 15px;
+      margin: 5px 0;
+      background-color: #e8f5e9;
+      color: #1b5e20;
+      border: none;
+      text-align: left;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 4px;
     }
 
-    select {
-      font-size: 1rem;
-      padding: 5px;
+    .ods-button:hover {
+      background-color: #c8e6c9;
     }
 
-    @media (max-width: 768px) {
-      .sidebar {
-        width: 100%;
-        height: auto;
-        position: relative;
-        border-right: none;
-        border-bottom: 1px solid #ccc;
-      }
+    #map-container {
+      position: absolute;
+      top: 60px;
+      left: 250px;
+      right: 0;
+      bottom: 0;
+      overflow: hidden;
+    }
 
-      header {
-        left: 0;
-        top: auto;
-        bottom: 0;
-        height: auto;
-        flex-direction: column;
-        padding: 10px;
-      }
-
-      arcgis-map {
-        top: 300px;
-        left: 0;
-      }
+    arcgis-map, arcgis-scene {
+      width: 100%;
+      height: 100%;
+      display: block;
     }
   </style>
 </head>
@@ -99,69 +97,72 @@
 
   <div class="sidebar">
     <h2>ODS Ambientales</h2>
-    <p>Visualiza información sobre los siguientes ODS:</p>
-    <ul>
-      <li>ODS 6 - Agua limpia</li>
-      <li>ODS 7 - Energía asequible</li>
-      <li>ODS 11 - Ciudades sostenibles</li>
-      <li>ODS 13 - Acción climática</li>
-      <li>ODS 14 - Ecosistemas marinos</li>
-      <li>ODS 15 - Vida terrestre</li>
-    </ul>
+    <button class="ods-button" data-ods="agua">ODS 6 - Agua y Saneamiento</button>
+    <button class="ods-button" data-ods="energia">ODS 7 - Energía Asequible</button>
+    <button class="ods-button" data-ods="clima">ODS 13 - Acción por el Clima</button>
+    <button class="ods-button" data-ods="ciudades">ODS 11 - Ciudades Sostenibles</button>
+    <button class="ods-button" data-ods="marinos">ODS 14 - Ecosistemas Marinos</button>
+    <button class="ods-button" data-ods="bosques">ODS 15 - Vida Terrestre</button>
   </div>
 
   <header>
     <strong>Geoportal ODS Ambiental</strong>
-    <div>
-      <label for="selectorODS">ODS:</label>
-      <select id="selectorODS">
-        <option value="agua">ODS 6 - Agua</option>
-        <option value="energia">ODS 7 - Energía</option>
-        <option value="ciudades">ODS 11 - Ciudades</option>
-        <option value="clima">ODS 13 - Clima</option>
-        <option value="marinos">ODS 14 - Marinos</option>
-        <option value="bosques">ODS 15 - Bosques</option>
-      </select>
-    </div>
+    <div>Visualización geográfica de indicadores de sostenibilidad</div>
   </header>
 
-  <arcgis-map id="map" item-id="2c3f8ee7752b4629ab581ba20e990232">
-    <arcgis-zoom position="top-left"></arcgis-zoom>
-    <arcgis-search position="top-right"></arcgis-search>
-    <arcgis-legend position="bottom-left"></arcgis-legend>
-    <arcgis-basemap-toggle position="bottom-right"></arcgis-basemap-toggle>
-    <arcgis-layer-list position="top-left"></arcgis-layer-list>
-    <arcgis-home position="top-left"></arcgis-home>
-    <arcgis-locate position="top-left"></arcgis-locate>
-    <arcgis-scale-bar position="bottom-left"></arcgis-scale-bar>
-    <arcgis-coordinate-conversion position="bottom-right"></arcgis-coordinate-conversion>
-  </arcgis-map>
+  <div id="map-container">
+    <arcgis-map id="map" item-id="2a2e5d76c246496690b3c2a28f884df0">
+      <arcgis-zoom position="top-left"></arcgis-zoom>
+      <arcgis-search position="top-right"></arcgis-search>
+      <arcgis-legend position="bottom-right"></arcgis-legend>
+      <arcgis-layer-list position="top-left"></arcgis-layer-list>
+      <arcgis-home position="top-left"></arcgis-home>
+      <arcgis-locate position="top-left"></arcgis-locate>
+      <arcgis-scale-bar position="bottom-right"></arcgis-scale-bar>
+      <arcgis-basemap-gallery position="top-right"></arcgis-basemap-gallery>
+    </arcgis-map>
+  </div>
 
   <script type="module">
-    const map = document.getElementById("map");
-    const selector = document.getElementById("selectorODS");
-
     const webmapsODS = {
-      agua: "2c3f8ee7752b4629ab581ba20e990232",
-      energia: "REEMPLAZAR_ID_ENERGIA",
-      ciudades: "REEMPLAZAR_ID_CIUDADES",
-      clima: "REEMPLAZAR_ID_CLIMA",
-      marinos: "REEMPLAZAR_ID_MARINOS",
-      bosques: "REEMPLAZAR_ID_BOSQUES"
+      agua: "2a2e5d76c246496690b3c2a28f884df0",
+      energia: "91b825c4f0c84eb499f45246b61c4106",
+      clima: "9ab621dbeef7403993c37120715d9727",
+      ciudades: "69342b9a479c4a7abdff1df4c6425ad0",
+      marinos: "f77b5962c4024b62981a8bfdae0339e8",
+      bosques: "e3dfac24825b4a878ad8e8c3ff6276cd"
     };
 
-    selector.addEventListener("change", (e) => {
-      const selected = e.target.value;
-      const itemId = webmapsODS[selected];
-      if (itemId) {
-        map.itemId = itemId;
-      } else {
-        alert("Este ODS aún no está disponible.");
-      }
-    });
+    function loadMap(selected, itemId, isScene = false) {
+      const container = document.getElementById("map-container");
+      container.innerHTML = "";
 
-    map.addEventListener("arcgisViewReadyChange", (event) => {
-      console.log("Mapa listo:", event.detail.view);
+      const mapElement = document.createElement(isScene ? "arcgis-scene" : "arcgis-map");
+      mapElement.setAttribute("id", "map");
+      mapElement.setAttribute("item-id", itemId);
+      mapElement.innerHTML = `
+        <arcgis-zoom position="top-left"></arcgis-zoom>
+        <arcgis-search position="top-right"></arcgis-search>
+        <arcgis-legend position="bottom-right"></arcgis-legend>
+        <arcgis-layer-list position="top-left"></arcgis-layer-list>
+        <arcgis-home position="top-left"></arcgis-home>
+        <arcgis-locate position="top-left"></arcgis-locate>
+        <arcgis-scale-bar position="bottom-right"></arcgis-scale-bar>
+        <arcgis-basemap-gallery position="top-right"></arcgis-basemap-gallery>
+        ${isScene ? '<arcgis-rotate position="top-left"></arcgis-rotate><arcgis-compass position="top-left"></arcgis-compass>' : ''}
+      `;
+
+      container.appendChild(mapElement);
+    }
+
+    document.querySelectorAll(".ods-button").forEach(button => {
+      button.addEventListener("click", () => {
+        const selected = button.dataset.ods;
+        const itemId = webmapsODS[selected];
+        const isScene = selected === "ciudades";
+        if (!itemId) return alert("Este ODS no está disponible.");
+        loadMap(selected, itemId, isScene);
+      });
     });
   </script>
 </body>
